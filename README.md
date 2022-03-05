@@ -16,3 +16,9 @@ The map may contain:
   - Enemy boxs: red box, when the agent enters it, the episode ends, the score gets decreased by two points and the agent get relocated randomly into a new empty box.
   - Reward boxs: its color depends on the value of its reward, the reward varies from 1 to 5, when the agent enters a reward box the score is increased by the value of the reward, the episode ends and the agent is relocated.
  
+
+The possible actions that the agent can take :
+  - (1,0,0,0) : moves from (x , y) to (x-1 , y)
+  - (0,1,0,0) : moves from (x , y) to (x , y+1)
+  - (0,0,1,0) : moves from (x , y) to (x+1 , y)
+  - (0,0,0,1) : moves from (x , y) to (x , y-1)
