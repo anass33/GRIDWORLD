@@ -1,11 +1,13 @@
 # GRIDWORLD
 This is a programing game, in which every player create an agent that will be playing on his behalf, and try to maximize its score by collecting as many as possible rewards and avoiding enemies.
 
-The project consists of three entities the environement (the world) : that manage the mape , the score , and the agent position.
-An agent : that based on a giving position and a giving reward , should take an action by moving eather to left , right , top, or bottom. 
+The project consists of three entities 
+The environement (the world) : that manage the mape , the score , and the agent position.
+An agent : that based on a giving position and a giving reward , should take an action by moving eather to left , right , top, or bottom.
 The main: is where theas classes are implimented and where the map is drawn.
 
 Every player should create it's own agent , that must contain the method action that return the action to take , based on two parameters , the current position and the reward collected from it.
+
 The game will be run for a specific number of episodes ( max_episodes ), for each agent separately , and the agent who comes out with the biggest score wins the game.
 
 The map may contain:
