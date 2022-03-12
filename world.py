@@ -5,18 +5,20 @@ class World:
     width=12
     hight=12
     map=[[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,5,0,0,0,0,0,0,4,0,0,-1],
-    [-1,-1,-1,0,-1,-1,-1,-1,-1,-1,0,-1],
-    [-1,0,-2,0,0,0,0,0,-2,0,0,-1],
+    [-1,5,0,0,0,-1,0,0,4,0,0,-1],
+    [-1,-2,-1,0,-1,-1,-1,-1,-1,-1,0,-1],
+    [-1,0,0,0,-1,0,0,0,-2,0,0,-1],
     [-1,0,-1,-1,-1,0,-1,0,0,0,0,-1],
     [-1,0,0,0,-1,0,-1,0,-1,-1,0,-1],
-    [-1,0,-1,0,-1,0,-1,0,0,0,0,-1],
+    [-1,-1,-1,0,-1,0,-1,0,0,0,0,-1],
     [-1,0,0,0,0,0,-1,-2,0,-1,0,-1],
     [-1,0,0,-1,-2,0,0,0,0,-1,2,-1],
     [-1,0,0,-1,0,0,0,1,0,-1,0,-1],
     [-1,3,0,0,0,0,0,0,0,0,0,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]
-    max_episodes=50
+    max_episodes=4000
+    learning_episodes=1200
+    the_cost_of_action=0.2
 
     def __init__(self):
         self.flor_color=(255,255,255)
@@ -32,6 +34,10 @@ class World:
         self.score=0
         self.reward=0
         self.episode=0
+        self.is_end_of_episode=False
+        self.moves=[(1,0,0,0),(0,1,0,0),(0,0,1,0),(0,0,0,1)]
+    
+  
 
 
 
@@ -56,71 +62,18 @@ class World:
         if( box_value==5): return self.reward_color_5
 
     def next_state(self,action):
-        if(action == (1,0,0,0)):
-            next_box=self.map[self.agent_position[0]-1][self.agent_position[1]]
-            if(next_box==-2):
-                self.agent_position=self.get_first_position()
-                self.reward=-2
-                self.episode=self.episode+1
-            if(next_box==-1):
-                self.reward=0
-            if(next_box==0):
-                self.agent_position=(self.agent_position[0]-1,self.agent_position[1])
-                self.reward=0
-            if(next_box>0):
-                self.agent_position=self.get_first_position()
-                self.reward=next_box
-                self.episode=self.episode+1
-
-        if(action == (0,1,0,0)):
-            next_box=self.map[self.agent_position[0]][self.agent_position[1]+1]
-            if(next_box==-2):
-                self.agent_position=self.get_first_position()
-                self.reward=-2
-                self.episode=self.episode+1
-            if(next_box==-1):
-                self.reward=0
-            if(next_box==0):
-                self.agent_position=(self.agent_position[0],self.agent_position[1]+1)
-                self.reward=0
-            if(next_box>0):
-                self.agent_position=self.get_first_position()
-                self.reward=next_box
-                self.episode=self.episode+1
-
-        if(action == (0,0,1,0)):
-            next_box=self.map[self.agent_position[0]+1][self.agent_position[1]]
-            if(next_box==-2):
-                self.agent_position=self.get_first_position()
-                self.reward=-2
-                self.episode=self.episode+1
-            if(next_box==-1):
-                self.reward=0
-            if(next_box==0):
-                self.agent_position=(self.agent_position[0]+1,self.agent_position[1])
-                self.reward=0
-            if(next_box>0):
-                self.agent_position=self.get_first_position()
-                self.reward=next_box
-                self.episode=self.episode+1
-
-        if(action == (0,0,0,1)):
-            next_box=self.map[self.agent_position[0]][self.agent_position[1]-1]
-            if(next_box==-2):
-                self.agent_position=self.get_first_position()
-                self.reward=-2
-                self.episode=self.episode+1
-            if(next_box==-1):
-                self.reward=0
-            if(next_box==0):
-                self.agent_position=(self.agent_position[0],self.agent_position[1]-1)
-                self.reward=0
-            if(next_box>0):
-                self.agent_position=self.get_first_position()
-                self.reward=next_box
-                self.episode=self.episode+1
-            
-        self.score+=self.reward
+        if(action in self.moves):
+            reward=self.map[self.agent_position[0]-action[0]+action[2]][self.agent_position[1]-action[3]+action[1]]
+            if(reward!=-1 ):
+                self.agent_position=(self.agent_position[0]-action[0]+action[2],self.agent_position[1]-action[3]+action[1])
+            if(reward!=-1 and reward!=0):
+                 self.episode=self.episode+1
+                 self.is_end_of_episode=True
+            else:
+                 self.is_end_of_episode=False
+            reward=reward-World.the_cost_of_action
+            self.reward=reward            
+            self.score+=self.reward
             
     
             
